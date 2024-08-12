@@ -6,6 +6,7 @@ import {
   getUsersFailure,
   getUsersSuccess,
   searchUsers,
+  searchUsersFailure,
 } from '../users-slice/users.actions';
 import { catchError, map, merge, mergeMap, Observable, of } from 'rxjs';
 import { UsersService } from '../../services/users.service';
@@ -19,91 +20,114 @@ import { DataService } from '../../services/data.service';
 export class UsersEffect {
   httpClient = inject(HttpClient);
 
-
   pageNumber$: Observable<number>;
 
   api: string = 'https://reqres.in/api/users';
 
   data$: any = [];
 
-  getUsers$ = createEffect(() => this.actions$.pipe(
-    ofType(getUsers),
-    // mergeMap(() => {
-    //   return this.httpClient.get(`${this.api}?page=2`).pipe(
-    //     map((data) => {
-    //       this.data$ = data;
-    //       console.log(data);
-    //       return searchUsers({searchedUsers: this.data$.data})}),
-    //       // return getUsersSuccess({users: this.data$.data})}),
-    //     catchError((error) => of(getUsersFailure({error: error.message})))
-    //   )
-    // }),
-    mergeMap(() => merge(
-       this.dataService.getData(this.api).pipe(
-        map((data) => {
-          this.data$ = data;
-          console.log(data);
-          return getUsersSuccess({data: {
-            data: this.data$.data,
-            total: this.data$.total,
-            page: this.data$.page,
-            perPage: this.data$.per_page,
-            totalPages: this.data$.total_pages
-          }})}),
-          // return getUsersSuccess({users: this.data$.data})}),
-        catchError((error) => of(getUsersFailure({error: error.message})))
-      ),
-      // this.httpClient.get(this.api).pipe(
-      //   map((data) => {
-      //     this.data$ = data;
-      //     console.log(data);
-      //     return searchUsers({searchedUsers: this.data$.data})}),
-      //     // return getUsersSuccess({users: this.data$.data})}),
-      // ),
-      // this.httpClient.get(`${this.api}?page=2`).pipe(
-      //   map((data) => {
-      //     this.data$ = data;
-      //     console.log(data);
-      //     return searchUsers({searchedUsers: this.data$.data})}),
-      //     // return getUsersSuccess({users: this.data$.data})}),
-      // )
-      this.dataService.getData(this.api).pipe(
-        map((data) => {
+  getUsers$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(getUsers),
+      // mergeMap(() => {
+      //   return this.httpClient.get(`${this.api}?page=2`).pipe(
+      //     map((data) => {
+      //       this.data$ = data;
+      //       console.log(data);
+      //       return searchUsers({searchedUsers: this.data$.data})}),
+      //       // return getUsersSuccess({users: this.data$.data})}),
+      //     catchError((error) => of(getUsersFailure({error: error.message})))
+      //   )
+      // }),
+      mergeMap(() =>
+        merge(
+          this.dataService.getData(this.api).pipe(
+            map((data) => {
               this.data$ = data;
               console.log(data);
-              return searchUsers({searchedUsers: this.data$.data})}),
-      ),
-      this.dataService.getData(`${this.api}?page=2`).pipe(
-        map((data) => {
+              return getUsersSuccess({
+                data: {
+                  data: this.data$.data,
+                  total: this.data$.total,
+                  page: this.data$.page,
+                  perPage: this.data$.per_page,
+                  totalPages: this.data$.total_pages,
+                },
+              });
+            }),
+            // return getUsersSuccess({users: this.data$.data})}),
+            catchError((error) => of(getUsersFailure({ error: error.message })))
+          ),
+          // this.httpClient.get(this.api).pipe(
+          //   map((data) => {
+          //     this.data$ = data;
+          //     console.log(data);
+          //     return searchUsers({searchedUsers: this.data$.data})}),
+          //     // return getUsersSuccess({users: this.data$.data})}),
+          // ),
+          // this.httpClient.get(`${this.api}?page=2`).pipe(
+          //   map((data) => {
+          //     this.data$ = data;
+          //     console.log(data);
+          //     return searchUsers({searchedUsers: this.data$.data})}),
+          //     // return getUsersSuccess({users: this.data$.data})}),
+          // )
+          this.dataService.getData(this.api).pipe(
+            map((data) => {
               this.data$ = data;
               console.log(data);
-              return searchUsers({searchedUsers: this.data$.data})}),
+              return searchUsers({ searchedUsers: this.data$.data });
+            }),
+            catchError((error) =>
+              of(searchUsersFailure({ error: error.message }))
+            )
+          ),
+          this.dataService.getData(`${this.api}?page=2`).pipe(
+            map((data) => {
+              this.data$ = data;
+              console.log(data);
+              return searchUsers({ searchedUsers: this.data$.data });
+            }),
+            catchError((error) =>
+              of(searchUsersFailure({ error: error.message }))
+            )
+          )
+        )
       )
-    )),
-    
-  ));
+    )
+  );
 
-  changePage$ = createEffect(() => this.actions$.pipe(
-    ofType(changePage),
-    mergeMap(() => {
-      return this.dataService.getData(`${this.api}?page=2`).pipe(
-        map((data) => {
-          this.data$ = data;
-          console.log(data);
-          return getUsersSuccess({data: {
-            data: this.data$.data,
-            total: this.data$.total,
-            page: this.data$.page,
-            perPage: this.data$.per_page,
-            totalPages: this.data$.total_pages
-          }})}),
+  changePage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(changePage),
+      mergeMap(() => {
+        return this.dataService.getData(`${this.api}?page=2`).pipe(
+          map((data) => {
+            this.data$ = data;
+            console.log(data);
+            return getUsersSuccess({
+              data: {
+                data: this.data$.data,
+                total: this.data$.total,
+                page: this.data$.page,
+                perPage: this.data$.per_page,
+                totalPages: this.data$.total_pages,
+              },
+            });
+          }),
           // return getUsersSuccess({users: this.data$.data})}),
-        catchError((error) => of(getUsersFailure({error: error.message})))
-      )
-    })
-  ));
+          catchError((error) => of(getUsersFailure({ error: error.message })))
+        );
+      })
+    )
+  );
 
-  constructor(private actions$: Actions, private usersService: UsersService, private store: Store<AppStateInterface>, private dataService: DataService) {
+  constructor(
+    private actions$: Actions,
+    private usersService: UsersService,
+    private store: Store<AppStateInterface>,
+    private dataService: DataService
+  ) {
     this.pageNumber$ = this.store.select(pageSelector);
   }
 }

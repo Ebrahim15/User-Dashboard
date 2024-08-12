@@ -16,6 +16,9 @@ export const changePage = createAction(
 export const searchUsers = createAction(
   '[Home Component] Search Users',
   props<{ searchedUsers: User[] }>()
-
+);
+export const searchUsersFailure = createAction(
+  '[Home Component] Search Users',
+  props<{ error: string }>()
 );
 

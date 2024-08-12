@@ -20,4 +20,5 @@ export interface UsersState {
     totalPages: number,
     searchedUsers: User[],
     error: string | null,
+    searchError: string | null,
 }

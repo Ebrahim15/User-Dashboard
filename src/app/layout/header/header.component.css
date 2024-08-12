@@ -43,6 +43,7 @@ a {
 a img {
     border-radius: 50%;
     width: 70px;
+    height: 70px;
 }
 
 .user-not-found {

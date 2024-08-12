@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { changePage, getUsers, getUsersFailure, getUsersSuccess, searchUsers } from './users.actions';
+import { changePage, getUsers, getUsersFailure, getUsersSuccess, searchUsers, searchUsersFailure } from './users.actions';
 import { Users } from '../../../types';
 import { UsersState } from '../users.interface';
 import { HttpClient } from '@angular/common/http';
@@ -13,6 +13,7 @@ export const initialState: UsersState = {
   perPage: 0,
   totalPages: 0,
   searchedUsers: [],
+  searchError: null,
   error: null,
 };
 
@@ -41,5 +42,9 @@ export const usersReducer = createReducer(
     ...state,
     isLoading: false,
     searchedUsers: state.searchedUsers.concat(action.searchedUsers)
-  }))
+  })),
+  on(searchUsersFailure, (state, action) => ({
+    ...state,
+    searchError: action.error,
+  })),
 );
