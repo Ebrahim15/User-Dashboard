@@ -1,0 +1,15 @@
+a {
+    padding: 0.7rem 2rem;
+    width: fit-content;
+    text-align: center;
+    background-color: #849FFF;
+    border: none;
+    border-radius: 1rem;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.5s;
+    text-decoration: none;
+}
+h2, div {
+    text-align: center;
+}

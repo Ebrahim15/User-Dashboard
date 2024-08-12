@@ -1,0 +1,13 @@
+<div class="wrapper">
+    <h1>Users</h1>
+    <div class="search-wrapper">
+        <input type="number" placeholder="Search by ID..." [(ngModel)]="inputValue" (input)="change($event)">
+        <div *ngIf="searchResultUser" class="search-results">
+            <a *ngIf="searchResultUser" [routerLink]="['/user', searchResultUser.id != null ? searchResultUser.id : []]" (click)="onClick()">
+                <img [src]="searchResultUser.avatar" [alt]="searchResultUser.first_name">
+                <p>{{searchResultUser.first_name}} {{searchResultUser.last_name}}</p>
+            </a>
+        </div>
+        <div class="user-not-found" *ngIf="!searchResultUser && inputValue">User not found</div>
+    </div>
+</div>

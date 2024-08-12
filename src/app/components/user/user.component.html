@@ -1,0 +1,9 @@
+<a class="wrapper" [routerLink]="['/user', user.id]">
+    <img [src]="user.avatar" [alt]="user.first_name">
+    <div>
+        <h3>{{user.first_name}} {{user.last_name}}</h3>
+        <p>{{user.email}}</p>
+    </div>
+</a>
+
+

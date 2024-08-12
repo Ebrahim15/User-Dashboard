@@ -1,0 +1,8 @@
+<div *ngIf="user" class="wrapper" >
+    <img [src]="user.avatar" [alt]="user.first_name">
+    <div class="text-wrapper">
+        <h3>{{user.first_name}} {{user.last_name}}</h3>
+        <p>{{user.email}}</p>
+    </div>
+    <a href="/">Home</a>
+</div>

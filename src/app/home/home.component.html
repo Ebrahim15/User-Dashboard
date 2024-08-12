@@ -1,0 +1,13 @@
+<div class="wrapper">
+    <div *ngIf="isLoading$ | async">Loading...</div>
+    <div class="users-list">
+        <app-user *ngFor="let user of users$ | async" [user]="user">
+        </app-user>
+    </div>
+
+    <p-paginator 
+    (onPageChange)="onPageChange($event)" 
+    [rows]="6" 
+    [totalRecords]="12" 
+     />
+</div>
