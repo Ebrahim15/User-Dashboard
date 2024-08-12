@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { Store, select } from '@ngrx/store';
 import { AppStateInterface } from '../appState.interface';
 import { pageSelector } from '../selectors/selectors';
+import { DataService } from '../../services/data.service';
 
 @Injectable()
 export class UsersEffect {
@@ -38,7 +39,7 @@ export class UsersEffect {
     //   )
     // }),
     mergeMap(() => merge(
-       this.httpClient.get(this.api).pipe(
+       this.dataService.getData(this.api).pipe(
         map((data) => {
           this.data$ = data;
           console.log(data);
@@ -52,21 +53,31 @@ export class UsersEffect {
           // return getUsersSuccess({users: this.data$.data})}),
         catchError((error) => of(getUsersFailure({error: error.message})))
       ),
-      this.httpClient.get(this.api).pipe(
+      // this.httpClient.get(this.api).pipe(
+      //   map((data) => {
+      //     this.data$ = data;
+      //     console.log(data);
+      //     return searchUsers({searchedUsers: this.data$.data})}),
+      //     // return getUsersSuccess({users: this.data$.data})}),
+      // ),
+      // this.httpClient.get(`${this.api}?page=2`).pipe(
+      //   map((data) => {
+      //     this.data$ = data;
+      //     console.log(data);
+      //     return searchUsers({searchedUsers: this.data$.data})}),
+      //     // return getUsersSuccess({users: this.data$.data})}),
+      // )
+      this.dataService.getData(this.api).pipe(
         map((data) => {
-          this.data$ = data;
-          console.log(data);
-          return searchUsers({searchedUsers: this.data$.data})}),
-          // return getUsersSuccess({users: this.data$.data})}),
-        catchError((error) => of(getUsersFailure({error: error.message})))
+              this.data$ = data;
+              console.log(data);
+              return searchUsers({searchedUsers: this.data$.data})}),
       ),
-      this.httpClient.get(`${this.api}?page=2`).pipe(
+      this.dataService.getData(`${this.api}?page=2`).pipe(
         map((data) => {
-          this.data$ = data;
-          console.log(data);
-          return searchUsers({searchedUsers: this.data$.data})}),
-          // return getUsersSuccess({users: this.data$.data})}),
-        catchError((error) => of(getUsersFailure({error: error.message})))
+              this.data$ = data;
+              console.log(data);
+              return searchUsers({searchedUsers: this.data$.data})}),
       )
     )),
     
@@ -75,7 +86,7 @@ export class UsersEffect {
   changePage$ = createEffect(() => this.actions$.pipe(
     ofType(changePage),
     mergeMap(() => {
-      return this.httpClient.get(`${this.api}?page=2`).pipe(
+      return this.dataService.getData(`${this.api}?page=2`).pipe(
         map((data) => {
           this.data$ = data;
           console.log(data);
@@ -92,7 +103,7 @@ export class UsersEffect {
     })
   ));
 
-  constructor(private actions$: Actions, private usersService: UsersService, private store: Store<AppStateInterface>) {
+  constructor(private actions$: Actions, private usersService: UsersService, private store: Store<AppStateInterface>, private dataService: DataService) {
     this.pageNumber$ = this.store.select(pageSelector);
   }
 }

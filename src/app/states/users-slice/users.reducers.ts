@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { changePage, getUsers, getUsersFailure, getUsersSuccess, searchUsers } from './users.actions';
-import { Users } from '../../types';
-import { UsersState } from '../states/users.interface';
+import { Users } from '../../../types';
+import { UsersState } from '../users.interface';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 

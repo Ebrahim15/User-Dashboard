@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppStateInterface } from '../states/appState.interface';
 import { searchedUsersSelector } from '../states/selectors/selectors';
-import { catchError } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-user-page',
@@ -18,7 +19,8 @@ import { catchError } from 'rxjs';
 export class UserPageComponent {
   user: any | undefined;
 
-  constructor(private router: Router, private route: ActivatedRoute, private store: Store<AppStateInterface>) {
+
+  constructor(private router: Router, private route: ActivatedRoute, private store: Store<AppStateInterface>,) {
   }
   
   httpClient = inject(HttpClient);
